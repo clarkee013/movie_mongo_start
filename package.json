@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha client/src/models/specs"
+    "test": "node_modules/.bin/mocha client/src/models/specs",
     "start": "nodemon server.js",
     "build": "cd client && webpack -w"
   },
