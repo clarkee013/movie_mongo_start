@@ -2,7 +2,9 @@ var Films = require('../models/films');
 
 var UI = function() {
   var films = new Films();
-  this.render(films);
+  films.all(function(result){
+   UI.prototype.render(result);
+});
 }
 
 UI.prototype = {

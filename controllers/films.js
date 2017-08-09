@@ -3,9 +3,12 @@ var app = express();
 var filmRouter = express.Router();
 //models
 //since we don't have a database we'll use our front end models at the moment
-var films = require('../client/src/models/films')();
+// var films = require('../client/src/models/films')();
 var Film = require('../client/src/models/film');
 var Review = require('../client/src/models/review');
+
+var FilmQuery = require('../client/db/filmQuery');
+var query = new FilmQuery;
 
 //film by id
 filmRouter.get('/:id', function(req, res){
@@ -14,7 +17,9 @@ filmRouter.get('/:id', function(req, res){
 
 //film index
 filmRouter.get('/', function(req, res) {
-  res.json(films);
+  query.all(function(results){
+    res.json(results);
+  })
 });
 
 //film update
@@ -31,10 +36,19 @@ filmRouter.put('/:id', function(req, res) {
 filmRouter.post('/', function(req, res) {
   var film = new Film({
     title: req.body.title,
-    actors: req.body.actors 
+    actors: req.body.actors,
+    genre: req.body.genre 
   });
-  films.push(film);
-  res.json({data: films});
+  var review = new Review({
+    comment: req.body.comment,
+    rating: req.body.ratings,
+    author: req.body.author
+  });
+  film.addReview(review);
+  query.add(film, function(results){
+    res.json(results);
+    res.redirect('/');
+  });
 });
 
 //delete film
